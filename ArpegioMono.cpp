@@ -76,6 +76,10 @@ void ArpegioMono::set_tempo(unsigned long temp)
 
 void ArpegioMono::apply() //Now 2micros!
 {
+  if (button->has_been_pressed()) armed = true;
+  if (button->has_been_released()) stop();
+  if (armed && trigger->value() && !started && !paused) start();
+  
 
   // TODO: add logic for armed state
   if (started)
@@ -172,8 +176,20 @@ void ArpegioMono::start()
 
 void ArpegioMono::stop()
 {
-  //next_note = 0;
+  armed = false;
   started = false;
+}
+
+void ArpegioMono::pause()
+{
+  started = false;
+  paused = true;
+}
+
+void ArpegioMono::unpause()
+{
+  if (armed) started = true;
+  paused = false;
 }
 
 bool ArpegioMono::is_started()
@@ -181,6 +197,10 @@ bool ArpegioMono::is_started()
   return started;
 }
 
+bool ArpegioMono::is_armed()
+{
+  return armed;
+}
 
 int ArpegioMono::get_duration_scaling()
 {

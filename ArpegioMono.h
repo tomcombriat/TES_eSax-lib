@@ -39,8 +39,11 @@ public:
   //int previous();
   void start();
   void stop();
+  void pause();
+  void unpause();
   void apply();
   bool is_started();
+  bool is_armed();
   int get_duration_scaling();
   unsigned int get_N_notes();
   int * get_notes();
@@ -53,7 +56,7 @@ private:
   float * times_arp;
   int * notes_arp;
   unsigned int  next_index = 0;
-  bool started  = false;
+  bool started  = false, armed = false, paused = false;
   unsigned long start_time = 0, duration = 500, next_event_time = 0, next_silent_time = 0;
   //short next_note;
   //short previous_note;
