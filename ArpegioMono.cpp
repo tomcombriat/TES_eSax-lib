@@ -76,10 +76,10 @@ void ArpegioMono::set_tempo(unsigned long temp)
 
 void ArpegioMono::apply() //Now 2micros!
 {
-  if (button->has_been_pressed()) armed = true;
+  if (button->has_been_pressed()) arm();
   if (button->has_been_released()) stop();
   if (armed && trigger->value() && !started && !paused) start();
-  
+  if (trigger->value()==0) stop();
 
   // TODO: add logic for armed state
   if (started)
@@ -97,19 +97,12 @@ void ArpegioMono::apply() //Now 2micros!
 	      float next_duration = 0.;
 
 
-	      /*
-	      // Calculating the duration of the next note
-	      if (next_index + 1 == N_note_arp) next_duration = duration_scaling  + times_arp[0] - times_arp[next_index]; //rollback
-	      else next_duration = times_arp[next_index + 1] - times_arp[next_index];
-	      */
-
 	      // Updating the next note
 	      if (notes_arp[next_index] != -255)
 		{
 		  for (byte i=0;i<POLYPHONY;i++) manager->get_note()[i]+= notes_arp[next_index];
-
-		  //next_note = notes_arp[next_index] + manager->get_note()[0];
 		}
+	      
 	      else// next_note = 0;  //silent note
 		{
 		  for (byte i=0;i<POLYPHONY;i++) manager->get_note()[i]= 0;
@@ -180,7 +173,7 @@ void ArpegioMono::stop()
   started = false;
 }
 
-void ArpegioMono::pause()
+void ArpegioMono::pause() // have all conditions to play (trigger and notes) but is prevented (to make room to another one.
 {
   started = false;
   paused = true;
@@ -188,7 +181,7 @@ void ArpegioMono::pause()
 
 void ArpegioMono::unpause()
 {
-  if (armed) started = true;
+  //if (armed) started = true;
   paused = false;
 }
 
@@ -201,6 +194,13 @@ bool ArpegioMono::is_armed()
 {
   return armed;
 }
+
+void ArpegioMono::arm()
+{
+  armed = true;
+  armed_time = millis();
+}
+
 
 int ArpegioMono::get_duration_scaling()
 {

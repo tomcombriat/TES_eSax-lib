@@ -47,6 +47,7 @@ public:
   int get_duration_scaling();
   unsigned int get_N_notes();
   int * get_notes();
+  unsigned long get_armed_time();
 
 
 private:
@@ -57,11 +58,10 @@ private:
   int * notes_arp;
   unsigned int  next_index = 0;
   bool started  = false, armed = false, paused = false;
-  unsigned long start_time = 0, duration = 500, next_event_time = 0, next_silent_time = 0;
-  //short next_note;
-  //short previous_note;
+  unsigned long start_time = 0, duration = 500, next_event_time = 0, next_silent_time = 0,armed_time=0;
   byte previous_note;
   int sustain_scaling = 127; // for shutting down the note before its real end (very electro): 127: full length, 0: no length.
+  void arm();
 };
 
 
