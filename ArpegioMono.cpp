@@ -84,11 +84,12 @@ void ArpegioMono::apply() //Now 2micros!
   // TODO: add logic for armed state
   if (started)
     {
-      if (manager->get_note()[0] != 0)
+      byte * note = manager->get_note();
+      if (note[0] != 0)
 	{
-	  if (manager->get_note()[0] != previous_note) // restart on changing note
+	  if (note[0] != previous_note) // restart on changing note
 	    {
-	      previous_note = manager->get_note()[0];
+	      previous_note = manager->note[0];
 	      start();
 	    }
 
@@ -100,12 +101,12 @@ void ArpegioMono::apply() //Now 2micros!
 	      // Updating the next note
 	      if (notes_arp[next_index] != -255)
 		{
-		  for (byte i=0;i<POLYPHONY;i++) manager->get_note()[i]+= notes_arp[next_index];
+		  for (byte i=0;i<POLYPHONY;i++) note[i]+= notes_arp[next_index];
 		}
 	      
 	      else// next_note = 0;  //silent note
 		{
-		  for (byte i=0;i<POLYPHONY;i++) manager->get_note()[i]= 0;
+		  for (byte i=0;i<POLYPHONY;i++) note[i]= 0;
 		}
 
 
@@ -134,16 +135,17 @@ void ArpegioMono::apply() //Now 2micros!
 	      //return true;
       
 	    }
-	  if (millis() >= next_silent_time) for (byte i=0;i<POLYPHONY;i++) manager->get_note()[i]= 0; //next_note = 0;  // if needed to shut down the note before the end
+	  if (millis() >= next_silent_time) for (byte i=0;i<POLYPHONY;i++) note[i]= 0; //next_note = 0;  // if needed to shut down the note before the end
     
 	}  // if (manager->get_note()[0] !=0)
 
       else {
 	previous_note = 0;
-	for (byte i=0;i<POLYPHONY;i++) manager->get_note()[i]= 0;
+	for (byte i=0;i<POLYPHONY;i++) note[i]= 0;
       }
       //return false;  // arp not started
     }
+
 }
 
 

@@ -4,7 +4,7 @@
 #include "NoteManager.h"
 #include "Button.h"
 
-
+#define TRANSPOSE_TYPE 0
 #define ARP_TYPE 2
 #define CHORD_TYPE 3
 
