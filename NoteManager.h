@@ -29,12 +29,15 @@ public:
   byte* get_previous_note();
   byte note[POLYPHONY] = { 0 };
   byte previous_note[POLYPHONY] = { 0 };
+  void incrementTranspose(char _transpose);
+  char getTranspose();
 
 
 
 private:
   unsigned int previous_touch_no_mod = 0;
   TouchRead* TR;
+  char transpose=0;
 };
 
 
