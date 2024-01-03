@@ -31,7 +31,9 @@ class Modifier
   void setButton(Button * _button)
   {
     button = _button;
-  }
+  };
+
+  byte getType() {return type;};
   
 protected:
   NoteManager * manager;
