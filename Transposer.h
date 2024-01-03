@@ -11,12 +11,12 @@ class Transposer: public virtual Modifier
   Transposer(NoteManager *, Button *);
 
   void apply();
-  void setTranspose(int);
-  int getTranspose();
+  void setTranspose(char);
+  char getTranspose();
 
 
  private:
-  int transpose;
+  char transpose=0;
 };
 
 

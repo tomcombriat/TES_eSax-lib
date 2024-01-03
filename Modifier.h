@@ -5,6 +5,7 @@
 #include "Button.h"
 
 #define TRANSPOSE_TYPE 0
+#define STICKYTRANSPOSE_TYPE 1
 #define ARP_TYPE 2
 #define CHORD_TYPE 3
 
@@ -26,6 +27,11 @@ class Modifier
   {
     return long_name;
   };
+
+  void setButton(Button * _button)
+  {
+    button = _button;
+  }
   
 protected:
   NoteManager * manager;
