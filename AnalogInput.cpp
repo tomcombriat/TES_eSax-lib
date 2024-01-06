@@ -11,8 +11,7 @@
 */
 
 
-
-
+// TODO: get rid of MAX_ADC, and compute it at initialization
 
 
 AnalogInput::AnalogInput(const int _pin, const unsigned long _response_time, byte _N_bits, int _biais, const int _dead_zone, const int _safety, float _scaling_factor):
