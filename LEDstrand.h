@@ -1,6 +1,10 @@
 #ifndef _LEDstrand_
 #define _LEDstrand_
 
+
+#include "NoteManager.h"
+#include "Pitchbend.h"
+#include "Midi_CC.h"
 #include <Adafruit_NeoPixel.h>
 
 /*
@@ -17,16 +21,19 @@
 class LEDstrand
 {
   public:
-  LEDstrand(Adafruit_NeoPixel*,const byte _num_leds, const unsigned long _response_time);
+  LEDstrand(Adafruit_NeoPixel*,const byte _num_leds, const unsigned long _response_time, NoteManager * _manager, Pitchbend * _pitchbend, Midi_CC * _pitchbend_amp_CC);
   void splash() const;
   void update();
 
 
   private:
-unsigned last_update = 0;
-    Adafruit_NeoPixel * strip;
+  unsigned last_update = 0;
+  Adafruit_NeoPixel * strip;
   const byte num_leds;
   const unsigned long response_time;
+  NoteManager * manager;
+  Pitchbend * pitchbend;
+  Midi_CC * pitchbend_amp_CC;
   
 
 };
