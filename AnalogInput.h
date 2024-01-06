@@ -26,7 +26,7 @@
 class A_Input
 {
 public:
-  A_Input(){};
+  //A_Input(){};
   A_Input(const int _pin, const unsigned long _response_time, const byte _N_bits): pin(_pin), response_time(_response_time), N_bits(_N_bits) {};
 
   void update(){};
@@ -35,9 +35,9 @@ public:
   
 
 protected:
-  int pin;
-  unsigned long response_time;
-  byte N_bits;
+  const int pin;
+  const unsigned long response_time;
+  const byte N_bits;
   int value;
 
 
