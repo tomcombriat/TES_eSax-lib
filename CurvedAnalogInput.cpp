@@ -1,7 +1,7 @@
 #include "CurvedAnalogInput.h"
 
 
-
+// TODO: RATIONALIZE A BIT...
 
 CurvedAnalogInput::CurvedAnalogInput(const int _pin, const short _global_max , int _biais, const unsigned long _response_time, const short _N_bits_low, const short _N_bits_high, const float _unbiased_threshold): pin(_pin), global_max(_global_max), response_time(_response_time), N_bits_low(_N_bits_low), N_bits_high(_N_bits_high), unbiased_threshold(_unbiased_threshold)
 {

@@ -23,7 +23,7 @@ class Modifier
     return name;
   };
   
-  String * get_long_name()
+  const String * get_long_name()
   {
     return long_name;
   };
@@ -39,7 +39,7 @@ protected:
   NoteManager * manager;
   Button * button;
   char name;
-  String * long_name;
+  const String * long_name;
   byte type;
 
 };
