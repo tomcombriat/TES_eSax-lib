@@ -44,18 +44,18 @@ public:
   void apply();
   bool is_started();
   bool is_armed();
-  int get_duration_scaling();
-  unsigned int get_N_notes();
-  int * get_notes();
-  unsigned long get_armed_time();
+  int get_duration_scaling() const;
+  unsigned int get_N_notes() const;
+  const int * get_notes() const;
+  unsigned long get_armed_time() const;
 
 
 private:
   CurvedAnalogInput * trigger;
   int duration_scaling = 1;  // for arp last more than one measure for instance
   unsigned int  N_note_arp;
-  float * times_arp;
-  int * notes_arp;
+  const float * times_arp;
+  const int * notes_arp;
   unsigned int  next_index = 0;
   bool started  = false, armed = false, paused = false;
   unsigned long start_time = 0, duration = 500, next_event_time = 0, next_silent_time = 0,armed_time=0;

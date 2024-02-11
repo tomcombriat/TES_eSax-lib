@@ -204,17 +204,17 @@ void ArpegioMono::arm()
 }
 
 
-int ArpegioMono::get_duration_scaling()
+int ArpegioMono::get_duration_scaling() const
 {
   return duration_scaling;
 }
 
-unsigned int ArpegioMono::get_N_notes()
+unsigned int ArpegioMono::get_N_notes() const
 {
   return N_note_arp;
 }
 
-int * ArpegioMono::get_notes()
+const int * ArpegioMono::get_notes() const
 {
   return notes_arp;
 }
