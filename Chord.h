@@ -10,15 +10,15 @@ public:
   Chord();
   //Chord(const unsigned int N, const int * _notes);
   Chord(NoteManager *, Button *);
-  void  set_notes( unsigned int N,  int * _notes);
-  void  set_notes( unsigned int N,  int * _notes,  char _name);
-  void  set_notes( unsigned int N,  int * _notes,  char _name,  String * _long_name);
+  void  set_notes( unsigned int N, const int * _notes);
+  void  set_notes( unsigned int N, const int * _notes,  char _name);
+  void  set_notes( unsigned int N, const int * _notes,  char _name, const String * _long_name);
   void apply();
-  unsigned int get_N_notes();
-  int * get_notes();
+  const unsigned int get_N_notes() const;
+  const int * get_notes() const;
 
 private:
-  int * notes_chord;
+  const int * notes_chord;
   unsigned int N_notes;
 };
 

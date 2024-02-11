@@ -66,7 +66,7 @@ const String chord11_long_name = "d5";
 
 
 const int * chord_notes[N_CHORD] = {chord0_notes, chord1_notes, chord2_notes, chord3_notes, chord4_notes, chord5_notes, chord6_notes, chord7_notes, chord8_notes, chord9_notes, chord10_notes, chord11_notes};
-const char chord_name[N_CHORD] = {chord0_name, chord1_name, chord2_name, chord3_name, chord4_name, chord5_name, chord6_name, chord7_name, chord8_name, chord9_name, chord10_name, chord11_name};
+const char chord_names[N_CHORD] = {chord0_name, chord1_name, chord2_name, chord3_name, chord4_name, chord5_name, chord6_name, chord7_name, chord8_name, chord9_name, chord10_name, chord11_name};
 const int chord_N[N_CHORD] = {chord0_N, chord1_N, chord2_N, chord3_N, chord4_N, chord5_N, chord6_N, chord7_N, chord8_N, chord9_N, chord10_N, chord11_N};
 const String * chord_long_names[N_CHORD] = {&chord0_long_name, &chord1_long_name, &chord2_long_name, &chord3_long_name, &chord4_long_name, &chord5_long_name, &chord6_long_name, &chord7_long_name, &chord8_long_name, &chord9_long_name, &chord10_long_name, &chord11_long_name};
 

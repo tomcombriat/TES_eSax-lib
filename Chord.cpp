@@ -12,20 +12,20 @@ Chord::Chord( unsigned int N,  int * _notes)
   notes_chord = _notes;
   }*/
 
-void Chord::set_notes( unsigned int N,  int * _notes)
+void Chord::set_notes( unsigned int N, const int * _notes)
 {
   N_notes = N;
   notes_chord = _notes;
 }
 
-void Chord::set_notes( unsigned int N,  int * _notes, char _name)
+void Chord::set_notes( unsigned int N, const int * _notes, char _name)
 {
   N_notes = N;
   notes_chord = _notes;
   name = _name;
 }
 
-void Chord::set_notes( unsigned int N,  int * _notes,  char _name,  String * _long_name)
+void Chord::set_notes( unsigned int N, const int * _notes,  char _name, const String * _long_name)
 {
   N_notes = N;
   notes_chord = _notes;
@@ -90,12 +90,12 @@ void Chord::apply()
     }*/
 }
 
-unsigned int Chord::get_N_notes()
+const unsigned int Chord::get_N_notes() const
 {
   return N_notes;
 }
 
-int * Chord::get_notes()
+const int * Chord::get_notes() const
 {
   return notes_chord;
 }
