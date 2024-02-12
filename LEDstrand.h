@@ -21,7 +21,7 @@
 class LEDstrand
 {
   public:
-  LEDstrand(Adafruit_NeoPixel*,const byte _num_leds, const unsigned long _response_time, NoteManager * _manager, Pitchbend * _pitchbend, Midi_CC * _pitchbend_amp_CC);
+  LEDstrand(Adafruit_NeoPixel*,const byte _num_leds, const unsigned long _response_time, NoteManager * _manager, Pitchbend * _pitchbend, Midi_CC_std * _pitchbend_amp_CC);
   void splash() const;
   void update();
 
@@ -33,7 +33,7 @@ class LEDstrand
   const unsigned long response_time;
   NoteManager * manager;
   Pitchbend * pitchbend;
-  Midi_CC * pitchbend_amp_CC;
+  Midi_CC_std * pitchbend_amp_CC;
   
 
 };

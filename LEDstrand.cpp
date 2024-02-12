@@ -3,7 +3,7 @@
 
 extern NoteManager manager;
 
-LEDstrand::LEDstrand( Adafruit_NeoPixel* _strip, const byte _num_leds, const unsigned long _response_time, NoteManager * _manager, Pitchbend * _pitchbend, Midi_CC * _pitchbend_amp_CC) : strip(_strip), num_leds(_num_leds), response_time(_response_time), manager(_manager), pitchbend(_pitchbend), pitchbend_amp_CC(_pitchbend_amp_CC) {
+LEDstrand::LEDstrand( Adafruit_NeoPixel* _strip, const byte _num_leds, const unsigned long _response_time, NoteManager * _manager, Pitchbend * _pitchbend, Midi_CC_std * _pitchbend_amp_CC) : strip(_strip), num_leds(_num_leds), response_time(_response_time), manager(_manager), pitchbend(_pitchbend), pitchbend_amp_CC(_pitchbend_amp_CC) {
 }
 
 void LEDstrand::update()

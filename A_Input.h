@@ -6,6 +6,7 @@
 #include<Arduino.h>
 
 // TODO: en fait, il faut 2 N bits: un en intern pour la resolution native de l'adc et un en externe pour la resolution de sortie pour pouvoir gérer facilement oversampling et curvature.
+// TODO: ou plutot, tout scaler en 16bits: N_bits peut etre la resolution de l'ADC
 
 
 // Mother class for both AnalogInput and Curved input.

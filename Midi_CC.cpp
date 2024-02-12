@@ -14,7 +14,7 @@
 
 extern byte midi_channel;
 
-Midi_CC::Midi_CC(byte _control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * _MIDI, const unsigned long _response_time, unsigned long _delta_time,  byte _biais):
+Midi_CC_std::Midi_CC_std(byte _control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * _MIDI, const unsigned long _response_time, unsigned long _delta_time,  byte _biais):
   control(_control), response_time(_response_time), delta_time(_delta_time), biais(_biais)
 {
   value = 0;
@@ -24,27 +24,27 @@ Midi_CC::Midi_CC(byte _control, midi::MidiInterface<midi::SerialMIDI<HardwareSer
   MIDI = _MIDI;
 }
 
-int Midi_CC::get_value()
+int Midi_CC_std::get_value()
 {
   return previous_value;
 }
 
-void Midi_CC::set_value(int _value)
+void Midi_CC_std::set_value(int _value)
 {
   value = _value;
 }
 
-byte Midi_CC::get_biais()
+byte Midi_CC_std::get_biais()
 {
   return biais;
 }
 
-void Midi_CC::set_biais(byte _biais)
+void Midi_CC_std::set_biais(byte _biais)
 {
   biais = _biais;
 }
 
-void Midi_CC::increment_biais(int increment)
+void Midi_CC_std::increment_biais(int increment)
 {
   if (millis() - last_biais_time > delta_time)  // just to limit increase in delta mode (not limited by analog_input timer)
     {
@@ -56,17 +56,17 @@ void Midi_CC::increment_biais(int increment)
     }
 }
 
-void Midi_CC::set_control(byte _control)
+void Midi_CC_std::set_control(byte _control)
 {
   control = _control;
 }
 
-byte Midi_CC::get_control()
+byte Midi_CC_std::get_control()
 {
   return control;
 }
 
-bool Midi_CC::update()
+bool Midi_CC_std::update()
 {
   changed = false;
   if (millis() - last_event_time > response_time)
@@ -91,7 +91,7 @@ bool Midi_CC::update()
   return changed;
 }
 
-bool Midi_CC::has_changed()
+bool Midi_CC_std::has_changed()
 {
   return changed;
 }
