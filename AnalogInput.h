@@ -89,10 +89,14 @@ public:
   bool update()
   {
     changed = false;
+    up = 0;
     if (millis() - last_read_time > response_time)
       {
+	int16_t new_value;
 	last_read_time = millis();
 	int32_t internal_value = analogRead(pin) - bias;
+	if (previous_internal_value == internal_value) return changed; // no need to compute
+	previous_internal_value = internal_value;
 	
 	if (internal_value > dead_zone)
 	  {
@@ -100,7 +104,7 @@ public:
 	    int32_t scaled_value = (UFix<NBits-1,0>(internal_value) * scaling_factor_pos).asInt();
 	    
 	    if (scaled_value > 32767) scaled_value = 32767;
-	    value = scaled_value;
+	    new_value = scaled_value;
 	  }
 
 	else if (internal_value < -dead_zone)
@@ -108,14 +112,21 @@ public:
 	    internal_value += dead_zone;
 	    int32_t scaled_value = -(UFix<NBits-1,0>(-internal_value) * scaling_factor_neg).asInt();
 	    if (scaled_value < -32768) scaled_value = -32768;
-	    value = scaled_value;
+	    new_value = scaled_value;
 	  }	
-	else value = 0;
+	else new_value = 0;
 	
-	if (inverted) value = 65535 - value;
+	if (inverted) new_value = 65535 - new_value;
+
+	if (new_value != value)
+	  {
+	    if (value > 15000 && new_value < 15000) up = 1;
+	    else if (value < -15000 && new_value > -15000) up = -1;
+	    value = new_value;
+	    changed = true;
+	  }
       }
-    return changed;
-  
+    return changed;  
   }
 
   void deCalibrate()
@@ -147,12 +158,15 @@ public:
     scaling_factor_neg = ((toUInt(uint16_t(bias - dead_zone - safety - min_sensor_value))).invAccurate()).sL<15>();
     
   }
+
+  int8_t getUpDown() {return up;}
   
   static constexpr byte getNbits() {return 16;}
 
 
 private:
-  uint16_t value, max_sensor_value = 3500, min_sensor_value = 50;
+  uint16_t max_sensor_value = 3500, min_sensor_value = 50;
+  int16_t value;
   uint16_t bias;
   const int pin;
   const unsigned long response_time;
@@ -161,6 +175,8 @@ private:
   const uint16_t safety;
   bool inverted, changed;
   UFix<16,16> scaling_factor_neg, scaling_factor_pos;
+  int32_t previous_internal_value;
+  int8_t up=0;
   
 
 };
