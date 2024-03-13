@@ -82,7 +82,7 @@ public:
     bias = tamp_bias >> 4;
   }
 
-  int16_t value() {return value;}
+  int16_t getValue() {return value;}
 
   void setInvert(bool _inverted) {inverted = _inverted;}
 
@@ -148,7 +148,7 @@ public:
     
   }
   
-  
+  static constexpr byte getNbits() {return 16;}
 
 
 private:
