@@ -80,6 +80,7 @@ public:
     int32_t tamp_bias = 0;
     for (byte i=0;i<16;i++) tamp_bias += analogRead(pin);
     bias = tamp_bias >> 4;
+    computeScalingFactor();
   }
 
   int16_t getValue() {return value;}
@@ -141,23 +142,20 @@ public:
 
     if (tamp_value < min_sensor_value) min_sensor_value = tamp_value;
     if (tamp_value > max_sensor_value) max_sensor_value = tamp_value;
+    computeScalingFactor();
   }
 
   void setMinMaxSensor(uint16_t min, uint16_t max)
   {
     min_sensor_value = min;
     max_sensor_value = max;
+    computeScalingFactor();
   }
 
   uint16_t getMinSensor() {return min_sensor_value;}
   uint16_t getMaxSensor() {return max_sensor_value;}
 
-  void computeScalingFactor()
-  {
-    scaling_factor_pos = ((toUInt(uint16_t(max_sensor_value - safety - dead_zone - bias))).invAccurate()).sL<15>();
-    scaling_factor_neg = ((toUInt(uint16_t(bias - dead_zone - safety - min_sensor_value))).invAccurate()).sL<15>();
-    
-  }
+
 
   int8_t getUpDown() {return up;}
   
@@ -177,6 +175,12 @@ private:
   UFix<16,16> scaling_factor_neg, scaling_factor_pos;
   int32_t previous_internal_value;
   int8_t up=0;
+
+    void computeScalingFactor()
+  {
+    scaling_factor_pos = ((toUInt(uint16_t(max_sensor_value - safety - dead_zone - bias))).invAccurate()).sL<15>();
+    scaling_factor_neg = ((toUInt(uint16_t(bias - dead_zone - safety - min_sensor_value))).invAccurate()).sL<15>();    
+  }
   
 
 };

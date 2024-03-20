@@ -68,6 +68,8 @@ public:
     int32_t tamp_bias = 0;
     for (byte i=0;i<16;i++) tamp_bias += analogRead(pin);
     bias = tamp_bias >> 4;
+    bias += internal_threshold;
+    computeCoef();
   }
 
    uint16_t getValue() {return value;}
@@ -76,22 +78,13 @@ public:
   /** Compute the scaling factor and the curvature factor depending on the bias and the max sensor value
 TODO: move to private once tests are over
    */
-  void computeCoef()
-  {
-    UFix<16,0> max_input = max_sensor_value - bias - 1.*(max_sensor_value - bias) * sensitivity / 10;
-    scaling_factor = toUInt(65535) * max_input.invAccurate();
-    curvature = 1.*curvature_index / (10 * max_input.asInt());
-    /*Serial.println(1.*curvature_index / (10 * max_input.asInt()));
-    Serial.print("bb ");
-    Serial.println(bias);*/
-  }
+
 
   void setCurvature(int8_t _curvature_index)
   {
     curvature_index = _curvature_index;
     if (curvature_index > 10) curvature_index = 10;
     if (curvature_index < -10) curvature_index = -10;
-
     computeCoef();
   }
 
@@ -110,26 +103,22 @@ TODO: move to private once tests are over
 
   void update()
   {
-  if (millis() - last_read_time > response_time)
-    {
-      last_read_time = millis();
-      int32_t value = analogRead(pin) - bias;
-      //Serial.println(value);
-      /* Serial.print(scaling_factor.asFloat());
-      Serial.print(" ");
-      Serial.println(curvature.asFloat());*/
-      if (value < 0) value = 0;
-      UFix<NBits,0> valueFM = value;
-      if (value != previous_internal_value)
-	{
-	  auto scaled_value = scaling_factor * (valueFM + curvature * valueFM * (valueFM - UFix<NBits,0>(max_sensor_value)));
-	  //Serial.println(scaled_value.asInt());
-					       
-	}
-      
-
-      
-    }
+    if (millis() - last_read_time > response_time)
+      {
+	last_read_time = millis();
+	int32_t internal_value = analogRead(pin) - bias;
+	if (internal_value < 0) internal_value = 0;
+	if (internal_value != previous_internal_value)
+	  {
+	    previous_internal_value = internal_value;
+	    UFix<NBits,0> valueFM = internal_value;
+	    auto scaled_value = scaling_factor * (valueFM + curvature * valueFM * (valueFM - UFix<NBits,0>(max_sensor_value)));
+	    internal_value = scaled_value.asInt();
+	    if (internal_value < 0) internal_value = 0;
+	    else if (internal_value > 65535) internal_value = 65535;
+	    value = internal_value;
+	  }
+      }
 
   }
   
@@ -147,8 +136,19 @@ TODO: move to private once tests are over
   unsigned long last_read_time;
   const int16_t internal_threshold;
   int32_t  previous_internal_value;
-  int8_t sensitivity, curvature_index;
-  UFix<8,8> scaling_factor, curvature;
+  int8_t sensitivity=0, curvature_index=0;
+  UFix<8,8> scaling_factor;
+  SFix<0,15> curvature;
+
+
+  void computeCoef()
+  {
+    UFix<16,0> max_input = max_sensor_value - bias - 1.*(max_sensor_value - bias) * sensitivity / 10;
+    scaling_factor = toUInt(65535) * max_input.invAccurate();
+    curvature = SFix<4,0>(curvature_index) * (UFix<4,0>(10) * max_input).invAccurate();
+  }
+
+  
 };
 
 #endif
