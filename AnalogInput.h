@@ -117,7 +117,11 @@ public:
 	  }	
 	else new_value = 0;
 	
-	if (inverted) new_value = 65535 - new_value;
+	if (inverted)
+	  {
+	    new_value = 65535 - new_value;
+	    if (new_value == -1) new_value = 0; // how to fix that…
+	  }
 
 	if (new_value != value)
 	  {
