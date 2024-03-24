@@ -97,12 +97,13 @@ public:
 
     case SR_SPI:  // native SPI
 
-      digitalWrite(ploadPin, LOW);
-      delayMicroseconds(PULSE_WIDTH_USEC);
+      
+      //delayMicroseconds(PULSE_WIDTH_USEC);
       digitalWrite(ploadPin, HIGH);
       TR_SPI->beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
       for (byte i=0;i<nChip;i++) bytesVal += TR_SPI->transfer(0)<<(i<<3);
       TR_SPI->endTransaction();
+      digitalWrite(ploadPin, LOW);
       break;
     }
     return (bytesVal);
