@@ -65,14 +65,22 @@ private:
     
 };
 
+class AnalogInputVirtual
+{
+public:
+  AnalogInputVirtual(){};
+  int16_t getValue() {return value;};
+  protected:
+  int16_t value;
+};
+
 template<uint8_t NBits>  // always output on the full range of int16_t
-class AnalogInput2
+class AnalogInput2: public AnalogInputVirtual
 {
 public:
   AnalogInput2(const int _pin, const unsigned long _response_time, const int16_t _dead_zone=10, const int16_t _safety = 10):pin(_pin), response_time(_response_time), dead_zone(_dead_zone), safety(_safety)
   {
     pinMode(pin, INPUT);
-    // analogReadResolution(NBits);
   }
 
   void calibrate()
@@ -168,7 +176,7 @@ public:
 
 private:
   uint16_t max_sensor_value = 3500, min_sensor_value = 50;
-  int16_t value;
+  //int16_t value;
   uint16_t bias;
   const int pin;
   const unsigned long response_time;
