@@ -56,24 +56,19 @@ void Midi_CC_std::increment_biais(int increment)
     }
 }
 
-void Midi_CC_std::set_control(byte _control)
-{
-  control = _control;
-}
+void Midi_CC_std::set_control(byte _control){control = _control;}
 
-byte Midi_CC_std::get_control()
-{
-  return control;
-}
+byte Midi_CC_std::get_control(){return control;}
 
 bool Midi_CC_std::update()
 {
   changed = false;
   if (millis() - last_event_time > response_time)
     {
-
-      max_accessible_range = max((int) 127 - biais,(int) biais);
-      int return_value = value * max_accessible_range / 127. + biais;
+      if (analog_input != NULL) value = (analog_input->getValue() >> 9)+64;
+      // max_accessible_range = max((int) 127 - biais,(int) biais);
+      //int return_value = value * max_accessible_range / 127. + biais;
+      int return_value = value;
       if (return_value > 127) return_value = 127;
       if (return_value < 0) return_value = 0;
     
@@ -91,7 +86,4 @@ bool Midi_CC_std::update()
   return changed;
 }
 
-bool Midi_CC_std::has_changed()
-{
-  return changed;
-}
+bool Midi_CC_std::has_changed(){return changed;}
