@@ -3,7 +3,8 @@
 
 #include<Arduino.h>
 #include<MIDI.h>
-#include"A_Input.h"
+//#include"A_Input.h"
+#include "AnalogInput.h"
 
 /*
   Combriat 2018, 2019, 2020, 2024
@@ -49,7 +50,7 @@ protected:
 class Midi_CC_std
 {
 public:
-  Midi_CC_std(byte control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> *, const unsigned long _response_time ,unsigned long _delta_time, byte _biais=0);
+  Midi_CC_std(byte control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> *, const unsigned long _response_time, unsigned long _delta_time, byte _biais=0);
   int get_value();
   void set_value(int _value);
   byte get_biais();
@@ -59,16 +60,20 @@ public:
   byte get_control();
   bool update();
   bool has_changed();
+  
+  void setAnalogInput(AnalogInputVirtual * _analog_input) {analog_input = _analog_input;};
+  
+  AnalogInputVirtual * getAnalogInput() {return analog_input;};
 
 private:
   byte control;
   const unsigned long response_time;
   int value, previous_value;
-  bool changed;
-  float max_accessible_range = 127;
+  bool changed,delta_mode = false;
   unsigned long last_biais_time, last_event_time, delta_time;
   byte biais;
   midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * MIDI;
+  AnalogInputVirtual * analog_input = NULL;
 };
 
 
