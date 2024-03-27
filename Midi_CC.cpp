@@ -23,31 +23,35 @@ Midi_CC_std::Midi_CC_std(byte _control, midi::MidiInterface<midi::SerialMIDI<Har
   MIDI = _MIDI;
 }
 
-byte Midi_CC_std::get_value()
+inline byte Midi_CC_std::getValue()
 {
   return value.asInt();
 }
 
-void Midi_CC_std::set_value(byte _value)
+inline void Midi_CC_std::setValue(byte _value)
 {
   value = _value;
 }
 
-byte Midi_CC_std::get_bias()
+inline byte Midi_CC_std::getBias()
 {
   return bias.asInt();
 }
 
-void Midi_CC_std::set_bias(byte _bias)
+inline void Midi_CC_std::setBias(byte _bias)
 {
   bias = _bias;
 }
 
+inline void Midi_CC_std::setDeltaMode(bool _mode) {delta_mode = _mode;}
+
+inline bool Midi_CC_std::getDeltaMode() {return delta_mode;}
 
 
-void Midi_CC_std::set_control(byte _control){control = _control;}
 
-byte Midi_CC_std::get_control(){return control;}
+inline void Midi_CC_std::setControl(byte _control){control = _control;}
+
+inline byte Midi_CC_std::getControl(){return control;}
 
 bool Midi_CC_std::update()
 {
@@ -95,4 +99,6 @@ bool Midi_CC_std::update()
   return changed;
 }
 
-bool Midi_CC_std::has_changed(){return changed;}
+inline bool Midi_CC_std::hasChanged(){return changed;}
+
+

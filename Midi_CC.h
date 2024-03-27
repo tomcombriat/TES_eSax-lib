@@ -54,15 +54,17 @@ class Midi_CC_std
 {
 public:
   Midi_CC_std(byte control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> *, const unsigned long _response_time, byte _biais=0);
-  byte get_value();
-  void set_value(byte _value);
-  byte get_bias();
-  void set_bias(byte _biais);
+  byte getValue();
+  void setValue(byte _value);
+  byte getBias();
+  void setBias(byte _biais);
+  void setDeltaMode(bool _mode);
+  bool getDeltaMode();
   //void increment_biais(int increment);
-  void set_control(byte _control);
-  byte get_control();
+  void setControl(byte _control);
+  byte getControl();
   bool update();
-  bool has_changed();
+  bool hasChanged();
   
   void setAnalogInput(AnalogInputVirtual * _analog_input) {analog_input = _analog_input;};
   
