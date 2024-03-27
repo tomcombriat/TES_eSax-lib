@@ -5,6 +5,7 @@
 #include<MIDI.h>
 //#include"A_Input.h"
 #include "AnalogInput.h"
+#include<FixMath.h>
 
 /*
   Combriat 2018, 2019, 2020, 2024
@@ -15,6 +16,8 @@
   This is the include file for the class MIDI control changes
 */
 
+
+/*
 class MIDI_CC
 {
 public:
@@ -42,7 +45,7 @@ protected:
   A_Input * analog_input;
   uint16_t value;
 
-};
+  };*/
 
 
 
@@ -50,12 +53,12 @@ protected:
 class Midi_CC_std
 {
 public:
-  Midi_CC_std(byte control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> *, const unsigned long _response_time, unsigned long _delta_time, byte _biais=0);
-  int get_value();
-  void set_value(int _value);
-  byte get_biais();
-  void set_biais(byte _biais);
-  void increment_biais(int increment);
+  Midi_CC_std(byte control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> *, const unsigned long _response_time, byte _biais=0);
+  byte get_value();
+  void set_value(byte _value);
+  byte get_bias();
+  void set_bias(byte _biais);
+  //void increment_biais(int increment);
   void set_control(byte _control);
   byte get_control();
   bool update();
@@ -68,9 +71,10 @@ public:
 private:
   byte control;
   const unsigned long response_time;
-  int value, previous_value;
-  bool changed,delta_mode = false;
-  unsigned long last_biais_time, last_event_time, delta_time;
+  SFix<8,7> value, previous_value,bias; // SF to check out of bounds  
+  SFix<15,0> raw_value;
+  bool changed,delta_mode = true;
+  unsigned long last_event_time;
   byte biais;
   midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * MIDI;
   AnalogInputVirtual * analog_input = NULL;

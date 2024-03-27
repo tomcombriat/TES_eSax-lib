@@ -14,47 +14,36 @@
 
 extern byte midi_channel;
 
-Midi_CC_std::Midi_CC_std(byte _control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * _MIDI, const unsigned long _response_time, unsigned long _delta_time,  byte _biais):
-  control(_control), response_time(_response_time), delta_time(_delta_time), biais(_biais)
+Midi_CC_std::Midi_CC_std(byte _control, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * _MIDI, const unsigned long _response_time, byte _biais):
+  control(_control), response_time(_response_time), biais(_biais)
 {
   value = 0;
   previous_value = -1;
-  last_biais_time = 0;
   last_event_time = 0;
   MIDI = _MIDI;
 }
 
-int Midi_CC_std::get_value()
+byte Midi_CC_std::get_value()
 {
-  return previous_value;
+  return value.asInt();
 }
 
-void Midi_CC_std::set_value(int _value)
+void Midi_CC_std::set_value(byte _value)
 {
   value = _value;
 }
 
-byte Midi_CC_std::get_biais()
+byte Midi_CC_std::get_bias()
 {
-  return biais;
+  return bias.asInt();
 }
 
-void Midi_CC_std::set_biais(byte _biais)
+void Midi_CC_std::set_bias(byte _bias)
 {
-  biais = _biais;
+  bias = _bias;
 }
 
-void Midi_CC_std::increment_biais(int increment)
-{
-  if (millis() - last_biais_time > delta_time)  // just to limit increase in delta mode (not limited by analog_input timer)
-    {
-      int tamp_biais = biais + increment;
-      if (tamp_biais > 127) tamp_biais = 127;
-      if (tamp_biais < 0) tamp_biais = 0;
-      biais = tamp_biais;
-      last_biais_time = millis();
-    }
-}
+
 
 void Midi_CC_std::set_control(byte _control){control = _control;}
 
@@ -64,22 +53,42 @@ bool Midi_CC_std::update()
 {
   changed = false;
   if (millis() - last_event_time > response_time)
-    {
-      if (analog_input != NULL) value = (analog_input->getValue() >> 9)+64;
-      // max_accessible_range = max((int) 127 - biais,(int) biais);
-      //int return_value = value * max_accessible_range / 127. + biais;
-      int return_value = value;
-      if (return_value > 127) return_value = 127;
-      if (return_value < 0) return_value = 0;
-    
+    {  
+      if (analog_input != NULL) raw_value = (analog_input->getValue());
+      
+      if (!delta_mode)
+	{
+	  if (raw_value.sR<8>() > bias) {auto mul = (UFix<8,0>(128) - bias).sR<15>(); // sR<15> to divide by the range of the input.	  
+	    value = raw_value * mul + bias;
+	  }
+	  else if (raw_value.sR<8>() < bias)
+	    {
+	    auto mul = (bias).sR<15>();
+	    value = raw_value * mul + bias;
+	  }
+      
+	  // checking the bounds
+	  if (value > UFix<7,0>(127)) value = 127;
+	  else if (value < SFix<1,0>(0)) value = 0; 
+	}
+	  
+      else  // delta mode
+	{
+	  bias = bias + raw_value.sR<16>();
+	  if (bias > UFix<7,0>(127)) bias = 127;
+	  else if (bias < SFix<1,0>(0)) bias = 0;
+	  value = bias;
+	} 
+  
+      
 
-
-      if (return_value != previous_value)
+      if (value != previous_value)
 	{
 	  last_event_time = millis();
 	  changed = true;
-	  previous_value = return_value;
-	  MIDI->sendControlChange(control, return_value, midi_channel);
+	  if (value.asInt() != previous_value.asInt()) MIDI->sendControlChange(control, value.asInt(), midi_channel);
+	  previous_value = value;
+	  
 	  return true;
 	}
     }
