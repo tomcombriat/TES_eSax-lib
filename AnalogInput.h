@@ -70,11 +70,12 @@ class AnalogInputVirtual
 public:
   AnalogInputVirtual(){};
   int16_t getValue() {return value;};
+  void update(){};
   protected:
   int16_t value;
 };
 
-template<uint8_t NBits>  // always output on the full range of int16_t
+template<uint8_t NBits>  // always output on the full range of int16_t, NBits is the number of bits of the ADC
 class AnalogInput2: public AnalogInputVirtual
 {
 public:
@@ -176,7 +177,6 @@ public:
 
 private:
   uint16_t max_sensor_value = 3500, min_sensor_value = 50;
-  //int16_t value;
   uint16_t bias;
   const int pin;
   const unsigned long response_time;

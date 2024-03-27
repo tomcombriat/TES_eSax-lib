@@ -58,7 +58,11 @@ bool Midi_CC_std::update()
   changed = false;
   if (millis() - last_event_time > response_time)
     {  
-      if (analog_input != NULL) raw_value = (analog_input->getValue());
+      if (analog_input != NULL)
+	{
+	  analog_input->update();
+	  raw_value = (analog_input->getValue());
+	}
       
       if (!delta_mode)
 	{
