@@ -1,3 +1,7 @@
+
+// TODO: make a structure?
+
+
 #define N_CHORD 12
 
 
