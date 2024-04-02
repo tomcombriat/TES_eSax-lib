@@ -66,8 +66,7 @@ public:
   bool update();
   bool hasChanged();
   
-  void setAnalogInput(AnalogInputVirtual * _analog_input) {analog_input = _analog_input;};
-  
+  void setAnalogInput(AnalogInputVirtual * _analog_input) {analog_input = _analog_input;};  
   AnalogInputVirtual * getAnalogInput() {return analog_input;};
 
 private:
@@ -78,6 +77,36 @@ private:
   bool changed,delta_mode = true;
   unsigned long last_event_time;
   byte biais;
+  midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * MIDI;
+  AnalogInputVirtual * analog_input = NULL;
+};
+
+
+
+class Midi_CC_HQ
+{
+public:
+  Midi_CC_HQ(byte control_msb, byte control_lsb, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> *, const unsigned long _response_time);
+  uint16_t getValue() {return value.asInt();};
+  void setValue(uint16_t _value) {raw_value = _value;};
+  void setControlMSB(byte _control) {control_msb = _control;};
+  byte getControlMSB() {return control_msb;};
+  void setControlLSB(byte _control) {control_lsb = _control;};
+  byte getControlLSB() {return control_lsb;};
+  bool update();
+  bool hasChanged() {return true;};
+  
+  void setAnalogInput(AnalogInputVirtual * _analog_input) {analog_input = _analog_input;};  
+  AnalogInputVirtual * getAnalogInput() {return analog_input;};
+
+private:
+  byte control_msb, control_lsb;
+  const unsigned long response_time;
+  UFix<16,0> raw_value;
+  UFix<14,0> value, previous_value;
+  bool changed;
+  unsigned long last_event_time;
+  
   midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * MIDI;
   AnalogInputVirtual * analog_input = NULL;
 };

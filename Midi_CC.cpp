@@ -71,9 +71,9 @@ bool Midi_CC_std::update()
 	  }
 	  else if (raw_value.sR<8>() < bias)
 	    {
-	    auto mul = (bias).sR<15>();
-	    value = raw_value * mul + bias;
-	  }
+	      auto mul = (bias).sR<15>();
+	      value = raw_value * mul + bias;
+	    }
       
 	  // checking the bounds
 	  if (value > UFix<7,0>(127)) value = 127;
@@ -96,13 +96,50 @@ bool Midi_CC_std::update()
 	  changed = true;
 	  if (value.asInt() != previous_value.asInt()) MIDI->sendControlChange(control, value.asInt(), midi_channel);
 	  previous_value = value;
-	  
-	  return true;
 	}
     }
   return changed;
 }
 
 inline bool Midi_CC_std::hasChanged(){return changed;}
+
+Midi_CC_HQ:: Midi_CC_HQ(byte _control_msb, byte _control_lsb, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * _MIDI, const unsigned long _response_time):
+  control_msb(_control_msb), control_lsb(_control_lsb), MIDI(_MIDI), response_time(_response_time)
+{
+  value = 0;
+  previous_value = 1;
+  last_event_time = 0;
+}
+
+bool Midi_CC_HQ::update()
+{
+  changed = false;
+  if (millis() - last_event_time > response_time)
+    {
+      if (analog_input != NULL)
+	{
+	  analog_input->update();
+	  raw_value = (analog_input->getValue());
+	}
+      value = raw_value.sR<2>(); // raw value is 16 bits, we remove the last two bits
+
+      if (value != previous_value)
+	{
+	  last_event_time = millis();
+	  changed = true;
+
+	  MIDI->sendControlChange(control_msb, value.sR<7>().asInt(), midi_channel); // removing the last 7 bits
+	  MIDI->sendControlChange(control_lsb, UFix<7,0>(value).asInt(), midi_channel);  // casting to get rid of the 7 MSB
+	  previous_value = value;	  
+	}
+    }
+  return changed;
+}
+
+
+
+
+
+
 
 

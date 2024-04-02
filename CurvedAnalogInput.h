@@ -3,6 +3,7 @@
 
 #include<Arduino.h>
 #include<FixMath.h>
+#include"AnalogInput.h"
 /*
   Combriat 2018, 2019, 2020, 2024
   This file is part of the OS embedded in the e-sax - TES
@@ -14,7 +15,7 @@
 
 
 
-class CurvedAnalogInput
+class CurvedAnalogInput 
 {
 public:
   CurvedAnalogInput(const int _pin, const short _global_max , int _biais, const unsigned long _response_time, const short _N_bits_low, const short _N_bits_high, const float _unbiased_threshold=0);
@@ -55,7 +56,7 @@ private:
 
 
 template<uint8_t NBits>  // always output on the full range of uint16_t
-class CurvedAnalogInput2
+class CurvedAnalogInput2: public AnalogInputVirtual
 {
 public:
   CurvedAnalogInput2(const int _pin, const unsigned long _response_time, const int16_t _threshold=10): pin(_pin), response_time(_response_time), internal_threshold(_threshold)
