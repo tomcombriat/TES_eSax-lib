@@ -17,39 +17,6 @@
 */
 
 
-/*
-class MIDI_CC
-{
-public:
-  MIDI_CC(byte _midi_channel, byte _control, const unsigned long _response_time, midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * _MIDI, A_Input * _analog_input=NULL):
-    midi_channel(_midi_channel), control(_control), response_time(_response_time), MIDI(_MIDI), analog_input(_analog_input)
-  {}
-
-  void update(){};
-  uint16_t getValue(){return value;}
-  byte getChannel(){return midi_channel;}
-  byte getControl(){return control;}
-  A_Input * getAnalogInput(){return analog_input;}
-  void setValue(uint16_t _value){value = _value;}
-  void setChannel(byte _channel){midi_channel = _channel;}
-  void setControl(byte _control){control = _control;}
-  void setAnalogInput(A_Input * _analog_input){analog_input = _analog_input;}
-  
-
-
-protected:
-  byte midi_channel;
-  byte control;
-  const unsigned long response_time;
-  midi::MidiInterface<midi::SerialMIDI<HardwareSerial>> * MIDI;
-  A_Input * analog_input;
-  uint16_t value;
-
-  };*/
-
-
-
-
 class Midi_CC_std
 {
 public:
