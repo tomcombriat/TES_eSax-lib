@@ -119,7 +119,7 @@ bool Midi_CC_HQ::update()
       if (analog_input != NULL)
 	{
 	  analog_input->update();
-	  raw_value = (analog_input->getValue());
+	  raw_value = (analog_input->getValue_u()); // unsigned
 	}
       value = raw_value.sR<2>(); // raw value is 16 bits, we remove the last two bits
 

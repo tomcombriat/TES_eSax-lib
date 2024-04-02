@@ -56,7 +56,7 @@ private:
 
 
 template<uint8_t NBits>  // always output on the full range of uint16_t
-class CurvedAnalogInput2: public AnalogInputVirtual
+class CurvedAnalogInput2: public virtual AnalogInputVirtual
 {
 public:
   CurvedAnalogInput2(const int _pin, const unsigned long _response_time, const int16_t _threshold=10): pin(_pin), response_time(_response_time), internal_threshold(_threshold)
@@ -72,8 +72,6 @@ public:
     bias += internal_threshold;
     computeCoef();
   }
-
-   uint16_t getValue() {return value;}
 
 
   /** Compute the scaling factor and the curvature factor depending on the bias and the max sensor value
@@ -102,7 +100,7 @@ TODO: move to private once tests are over
     computeCoef();
   }
 
-  void update()
+  bool update()
   {
     if (millis() - last_read_time > response_time)
       {
@@ -117,10 +115,10 @@ TODO: move to private once tests are over
 	    internal_value = scaled_value.asInt();
 	    if (internal_value < 0) internal_value = 0;
 	    else if (internal_value > 65535) internal_value = 65535;
-	    value = internal_value;
+	    value_u = internal_value;
 	  }
       }
-
+    return true;
   }
   
 
@@ -131,7 +129,7 @@ TODO: move to private once tests are over
 
 
  private:
-  uint16_t max_sensor_value = 3500, value, bias=0;
+  uint16_t max_sensor_value = 3500, bias=0;
   const int pin;
   const unsigned long response_time;
   unsigned long last_read_time;

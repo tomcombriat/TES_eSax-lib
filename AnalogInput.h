@@ -69,10 +69,12 @@ class AnalogInputVirtual
 {
 public:
   AnalogInputVirtual(){};
-  int16_t getValue() {return value;};
-  void update(){};
+virtual int16_t getValue() {return value;};
+ virtual uint16_t getValue_u() {return value_u;};
+  virtual bool update(){return false;};
   protected:
   int16_t value;
+  uint16_t value_u;
 };
 
 template<uint8_t NBits>  // always output on the full range of int16_t, NBits is the number of bits of the ADC
@@ -92,7 +94,7 @@ public:
     computeScalingFactor();
   }
 
-  int16_t getValue() {return value;}
+  // int16_t getValue() {return value;}
 
   void setInvert(bool _inverted) {inverted = _inverted;}
 
